@@ -1,0 +1,9 @@
+<td id="<%= bookable %>_account_<%= availability[:account_id] %>_utilisation" class="color--light font--semibold text--center" data-programmes-target="<%='programmeFacilitatorCopy' unless bookable_type == 'ModuleInstance' %>">
+  <% if availability[:utilisation].present? %>
+    <span class="color--<%= utilisation_colour(availability[:utilisation].booked_count, availability[:utilisation].target_days, overlimit_class_append: '-500') %>">
+      <%= availability[:utilisation].booked_count %> / <%= availability[:utilisation].target_days %>
+    </span>
+  <% else %>
+    <span>- / -</span>
+  <% end %>
+</td>

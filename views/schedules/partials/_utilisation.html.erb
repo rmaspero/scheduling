@@ -1,0 +1,10 @@
+<tr>
+  <td class="position--sticky left--0 <%= account_counter.odd? ? 'bg--lightest' : 'bg--lighter' %>"><%= account.name %></td>
+  <% account.month_utilisations.each do |month_utilisation| %>
+    <td>
+      <span class="color--<%= utilisation_colour(month_utilisation.booked_count, month_utilisation.target_days, overlimit_class_append: '-500') %>">
+        <%= month_utilisation.booked_count %> / <%= month_utilisation.target_days %>
+      </span>
+    </td>
+  <% end %>
+</tr>

@@ -1,0 +1,5 @@
+<td class="cell--link" id="<%= dom_id(month_utilisation) %>">
+  <%= link_to edit_month_utilisation_path(month_utilisation), class: "link link--cell link--#{utilisation_colour(month_utilisation.booked_count, month_utilisation.target_days)} font--semibold", data: { turbo_frame: :modals } do %>
+    <%= month_utilisation.booked_count %> / <%= month_utilisation.target_days %>
+  <% end %>
+</td>

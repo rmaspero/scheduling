@@ -1,0 +1,77 @@
+<% provide(:title, 'My Availability') %>
+
+<div class="page-header">
+  <div class="page-header__container page-header__container--heading">
+    <div class="page-header__heading">
+      <h2 class="m--0">My Availability</h2>
+    </div>
+
+    <div class="page-header__actions">
+      <%= link_to 'All Thresholds Calendars', show_subscribe_availabilities_path, class: 'button button--stroke button--grey', data: { turbo_frame: :modals } %>
+
+      <%= link_to 'Set Availability', new_availability_path(start_date: params[:start_date]), class: 'button button--success', data: { turbo_frame: :modals } %>
+    </div>
+  </div>
+</div>
+
+<div class="page-sections">
+  <div class="page-section">
+    <div class="page-section__sidebar">
+      <h3 class="page-section-sidebar__title">Days I Can Work</h3>
+      <p>Use this section to view your availability. The calendar uses the following key:</p>
+
+      <ul class="li--none p--0 -font-size--1">
+        <li class="display--flex align-items--center"><span class="mr--3 dot -dot-size--5 dot--booked"></span>Scheduled</li>
+        <li class="display--flex align-items--center"><span class="mr--3 dot -dot-size--5 dot--available"></span>Preferred</li>
+        <li class="display--flex align-items--center"><span class="mr--3 dot -dot-size--5 dot--unavailable"></span>Unavailable</li>
+      </ul>
+    </div>
+
+    <div class="page-section__body p--7 pt--6 p--3-sm">
+      <%= month_calendar(partial: 'availabilities/partials/availability_calendar', events: @availabilities) do |date, availabilities| %>
+        <div class="cell-heading__date"><%= l(date, format: :day) %></div>
+
+        <% availabilities.sort_by(&:sort_by_priority).each do |availability| %>
+          <div class="calendar-availability calendar-availability--<%= availability.availability_type %>">
+            <% if availability.booked? %>
+              <div data-controller="tooltip" data-tooltip-content-value="<%= "#{availability.bookable.programme.name} - " if availability.bookable_module_instance? %><%= availability.bookable.name %>"><%= availability.bookable.calendar_name %></div>
+            <% else %>
+              <div><%= availability.availability_type_i18n %></div>
+
+              <% if availability.start_time > Time.zone.now.end_of_day %>
+                <%= link_to availability_path(availability, start_time: availability.start_time), method: :delete, class: 'ml--2 link--danger link--current', data: { confirm: 'Are you sure you want to remove this availability? You will not be able to undo this action.' } do %>
+                  <i class="fas fa-times"></i>
+                <% end %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="page-section">
+    <div class="page-section__sidebar">
+      <h3 class="page-section-sidebar__title">Calendar Rules</h3>
+      <p>Set up repeating availability for the days of the week you're always available or unavailable.</p>
+      <p>You can set up a repeating or one-off availability rule by using the <span class="font--semibold">Set Availability</span> button.</p>
+    </div>
+
+    <div class="page-section__body p--7">
+      <% if @repeating_availabilities.present? %>
+        <ul class="li--none p--0">
+          <%= render partial: 'availabilities/partials/repeating_availability', collection: @repeating_availabilities, as: :availability %>
+        </ul>
+      <% else %>
+        <div class="text--center">
+          <h4 class="mt--0 mb--1">
+            <span>No Repeating Availability Rules Found</span>
+            <span class="-mb--1px emoji emoji-calendar"></span>
+          </h4>
+
+          <p>We couldn't find any rules. Why not create your first <%= link_to 'rule', new_availability_path(start_date: params[:start_date]), data: { turbo_frame: :modals } %>?</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

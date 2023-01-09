@@ -1,0 +1,9 @@
+<li class="display--flex flex-direction--row justify-content--space-between mb--6">
+  <div class="display--flex flex-direction--row">
+    <%= repeating_availability_icon(availability.availability_type) %>
+
+    <span class="mr--10"><%= availability.rule %></span>
+  </div>
+
+  <%= link_to 'Delete', availability_path(availability), method: :delete, class: 'link link--danger', data: { confirm: 'Are you sure you want to remove this repeating availability? You will not be able to undo this action.' } %>
+</li>

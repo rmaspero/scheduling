@@ -1,0 +1,11 @@
+<%= turbo_frame_tag :scheduling_calendar_sidebar, class: 'position--sticky top--6' do %>
+  <span class="font-size--1 color--darker">Availability for <span class="font--semibold"><%= @calendar_date.day.ordinalize %> of <%= @calendar_date.strftime('%B') %></span>:</span>
+
+  <ul class="li--none mt--3 p--0">
+    <% @account_statuses.each do |account| %>
+      <li class="display--flex flex-direction--row align-items--center mb--2">
+        <%= accounts_scheduled_status(account) %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

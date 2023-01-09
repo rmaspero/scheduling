@@ -1,0 +1,57 @@
+<div class="modal-screen" data-controller="modal">
+  <div class="modal-bg" data-action="click->modal#remove"></div>
+
+  <div class="modal max-w--40em">
+    <div class="modal__top">
+      <div class="modal__title">
+        <span>Subscribe to Thresholds Calendar</span>
+      </div>
+
+      <a class="font-size--3 link--brand cursor--pointer" data-action="click->modal#remove">
+        <i class="fas fa-sm fa-times"></i>
+      </a>
+    </div>
+
+    <div class="modal__middle modal__middle--illustration">
+      <p>You can subscribe to each programme type's calendar or the programmes you have been assigned by clicking each of the buttons below. This will connect the calendar to your calendar app so you can check and sort your availability.</p>
+      <p class="mb--5">Or you can copy the subscriptions links of each calendar and subscribe to the calendar from your calendar app manually.</p>
+
+      <p>Many applications support subscribing to calendars including:</p>
+      <ul class="mt--0">
+        <li><%= link_to 'Google Calendar', 'https://support.google.com/calendar/answer/37100?hl=en&co=GENIE.Platform%3DDesktop', target: '_blank' %></li>
+        <li><%= link_to 'Outlook', 'https://support.microsoft.com/en-gb/topic/cff1429c-5af6-41ec-a5b4-74f2c278e98c', target: '_blank' %></li>
+        <li><%= link_to 'Apple iCal', 'https://support.apple.com/en-gb/guide/calendar/icl1022/mac', target: '_blank' %></li>
+      </ul>
+    </div>
+
+    <div class="modal__bottom flex--column gap--4">
+      <div class="display--flex w--100pc">
+        <%= link_to 'Subscribe to Thresholds Courses', courses_calendar_subscibe_url(protocol: :webcal, format: :ics, guid: current_account.guid), class: 'button button--course button--broad button--split__left flex-grow--1' %>
+        <div class="button button--course-light button--broad button--split__right color--base px--7" data-controller="copy" data-action="click->copy#toClipboard" data-copy-copyable-value="<%= courses_calendar_subscibe_url(protocol: :webcal, format: :ics, guid: current_account.guid) %>">
+          <i class="far fa-clipboard mb--1px"></i>
+        </div>
+      </div>
+
+      <div class="display--flex w--100pc">
+        <%= link_to 'Subscribe to Thresholds Events', events_calendar_subscibe_url(protocol: :webcal, format: :ics, guid: current_account.guid), class: 'button button--event button--broad button--split__left flex-grow--1' %>
+        <div class="button button--event-light button--broad button--split__right color--base px--7" data-controller="copy" data-action="click->copy#toClipboard" data-copy-copyable-value="<%= events_calendar_subscibe_url(protocol: :webcal, format: :ics, guid: current_account.guid) %>">
+          <i class="far fa-clipboard mb--1px"></i>
+        </div>
+      </div>
+
+      <div class="display--flex w--100pc">
+        <%= link_to 'Subscribe to Thresholds Workshops', workshops_calendar_subscibe_url(protocol: :webcal, format: :ics, guid: current_account.guid), class: 'button button--workshop button--broad button--split__left flex-grow--1' %>
+        <div class="button button--workshop-light button--broad button--split__right color--base px--7" data-controller="copy" data-action="click->copy#toClipboard" data-copy-copyable-value="<%= workshops_calendar_subscibe_url(protocol: :webcal, format: :ics, guid: current_account.guid) %>">
+          <i class="far fa-clipboard mb--1px"></i>
+        </div>
+      </div>
+
+      <div class="display--flex w--100pc">
+        <%= link_to 'Subscribe to My Programmes', my_programmes_calendar_subscibe_url(protocol: :webcal, format: :ics, guid: current_account.guid), class: 'button button--primary-brand button--broad button--split__left flex-grow--1' %>
+        <div class="button button--primary-brand-light button--broad button--split__right color--base px--7" data-controller="copy" data-action="click->copy#toClipboard" data-copy-copyable-value="<%= my_programmes_calendar_subscibe_url(protocol: :webcal, format: :ics, guid: current_account.guid) %>">
+          <i class="far fa-clipboard mb--1px"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

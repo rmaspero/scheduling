@@ -1,0 +1,90 @@
+<%= turbo_frame_tag availability_rule, target: :_top do %>
+  <div class="modal-screen" data-controller="modal availability-rule">
+    <div class="modal-bg" data-action="click->modal#remove"></div>
+
+    <%= simple_form_for availability_rule, url: availabilities_path(start_date: start_date), html: { class: 'modal max-w--30em' } do |f| %>
+      <div class="modal__top">
+        <div class="modal__title">
+          <span>Set Availability</span>
+        </div>
+
+        <a class="font-size--3 link--brand cursor--pointer" data-action="click->modal#remove">
+          <i class="fas fa-sm fa-times"></i>
+        </a>
+      </div>
+
+      <div class="modal__middle">
+        <p>Use this form to set when you are available or unavailable to work for Thresholds. These preferences will then show on your calendar.</p>
+        <p class="mb--5">The repeat option can be used to set recurring availability preferences.</p>
+
+        <div class="form__inputs p--0" data-controller="datepicker show-hide">
+          <%= f.input :availability_type,
+            label: 'Availability Type',
+            collection: AvailabilityRule.availability_types.except('booked'),
+            wrapper_html: { class: 'form__input--full' } %>
+
+          <%= f.input :start_time,
+            as: :string,
+            label: 'Date',
+            wrapper_html: { class: 'form__input--full' },
+            input_html: { autocomplete: 'off', data: { datepicker_target: 'date' } } %>
+
+          <%= f.input :repeat_type,
+            label: 'Repeat',
+            wrapper_html: { class: 'form__input--full' },
+            input_html: {
+              data: {
+                availability_rule_target: 'toggle',
+                show_hide_target: 'multipleObjectsSource',
+                action: 'change->show-hide#toggleMultipleObjectsByOptions change->availability-rule#toggleText'
+              }
+            },
+            hint: 'How often should this preference repeat?' %>
+
+          <%= f.input :end_time,
+            label: 'End of Repeat',
+            as: :string,
+            label_html: {
+              data: {
+                availability_rule_target: 'togglableText',
+                one_off_message: 'End Date',
+                repeat_message: 'End of Repeat'
+              }
+            },
+            wrapper_html: {
+              class: "form__input--full display--none",
+              data: {
+                show_hide_target: 'multipleObjects',
+                options: 'weekly,monthly,one_off',
+              },
+            },
+            input_html: { autocomplete: 'off', data: { datepicker_target: 'date' } },
+            hint_html: {
+              data: {
+                availability_rule_target: 'togglableText',
+                one_off_message: 'Choose and end date or leave blank for same day',
+                repeat_message: 'Choose when this repetition should end'
+              }
+            },
+            hint: 'Choose when this repetition should end' %>
+
+          <%= f.input :frequency,
+            wrapper_html: {
+              class: "form__input--full display--none",
+              data: {
+                show_hide_target: 'multipleObjects',
+                options: 'weekly,monthly',
+              }
+            },
+            hint: 'How often should this repetition happen? e.g. 1: every week, 2: every 2 weeks' %>
+        </div>
+      </div>
+
+      <div class="modal__bottom">
+        <div class="required form__input">
+          <%= f.button :submit, 'Create Availability', class: 'button button--success' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

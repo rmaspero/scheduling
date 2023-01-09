@@ -1,0 +1,85 @@
+<% provide(:title, 'Scheduling') %>
+
+<div class="page-header">
+  <div class="page-header__container page-header__container--heading">
+    <div class="page-header__heading">
+      <h2 class="m--0">Scheduling</h2>
+    </div>
+  </div>
+</div>
+
+<div class="page-sections">
+  <div class="page-section">
+    <div class="page-section__sidebar h--100pc">
+      <h3 class="page-section-sidebar__title">Programmes Calendar</h3>
+      <p>Use this section to view all draft, scheduled, and active programmes.</p>
+      <p class="mb--6">Click a day to view available facilitators.</p>
+
+      <%= turbo_frame_tag :scheduling_calendar_sidebar, src: availability_spinner_schedule_path(date: @calendar_date) %>
+    </div>
+
+    <div class="page-section__body p--7 pt--6 p--3-sm">
+      <%= month_calendar(partial: 'schedules/partials/scheduling_calendar', events: @combined_calendar_events, end_attribute: :scheduling_calendar_end_time) do |date, bookables| %>
+        <%= link_to availability_spinner_schedule_path(date: date), data: { turbo_frame: :scheduling_calendar_sidebar }, class: 'day__link' do %>
+          <div class="cell-heading__date"><%= l(date, format: :day) %></div>
+
+          <% bookables.each do |bookable| %>
+            <% if bookable.module_instance? %>
+              <div class="calendar-scheduling calendar-scheduling--module" data-controller="tooltip" data-tooltip-content-value="<%= bookable.programme.name %> - <%= bookable.name %>">
+                <%= bookable.calendar_name %>
+              </div>
+            <% else %>
+              <div class="calendar-scheduling calendar-scheduling--<%= bookable.type_name.downcase %>" data-controller="tooltip" data-tooltip-content-value="<%= bookable.name %>">
+                <%= bookable.calendar_name %>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="page-section">
+    <div class="page-section__sidebar">
+      <h3 class="page-section-sidebar__title">Thresholds Utilisation</h3>
+      <p class="mb--6">View admin and facilitator activity compared to their desired days.</p>
+
+    <%= link_to export_schedule_path, method: :post, class: "button button--stroke button--grey", id: "export_schedules" do %>
+      <i class="fal fa-download mr--3"></i>Export to CSV
+    <% end %>
+      <span class="form__hint">Click to export further utilisation details</span>
+    </div>
+
+    <% if @accounts.present? %>
+      <table class="utilisation-table">
+        <thead>
+          <tr>
+            <th class="min-w--18em position--sticky left--0 bg--lightest"></th>
+
+            <% @accounts.first.month_utilisations.pluck(:date).each do |date| %>
+              <th class="min-w--90px <%= 'bg--warning-light' if date.beginning_of_month == Date.current.beginning_of_month %>">
+                <%= l(date, format: :short_month_year) %>
+              </th>
+            <% end %>
+          </tr>
+        </thead>
+
+        <tbody>
+          <%= render partial: 'schedules/partials/utilisation', collection: @accounts, as: :account %>
+        </tbody>
+      </table>
+    <% else %>
+      <div class="page-section__body bs--none">
+        <div class="no-results w--100 min-h--15">
+        <div class="text--center m--6">
+          <h4 class="mt--0 mb--1">
+            <span>No Utilisation Data Yet</span>
+            <span class="-mb--1px emoji emoji-sad"></span>
+          </h4>
+          <p>Once accounts with monthly utilisations are generated they will appear here.</p>
+        </div>
+      </div>
+      </div>
+    <% end %>
+  </div>
+</div>
