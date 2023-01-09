@@ -1,4 +1,4 @@
-# scheduling
+# Scheduling and Availability Tool
 
 This repo outlines the work we did to combine both the icecube gem and simple_calendar to create a day scheduling tool.
 
